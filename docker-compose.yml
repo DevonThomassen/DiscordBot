@@ -1,0 +1,36 @@
+version: '3.4'
+
+services:
+  discordbot.web:
+    image: ${DOCKER_REGISTRY-}discordbotweb
+    build:
+      context: .
+      dockerfile: DiscordBot.Web/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - MONGO_CONNECTION_STRING=mongodb://mongo:27017
+      - SQLSERVER_CONNECTION_STRING=Server=localhost,1433;Database=DiscordBot;User Id=sa;Password=${SA_PASSWORD};
+
+  sqlserver:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    container_name: sqlserver
+    ports:
+      - "1433:1433"
+    user: root
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=${SA_PASSWORD}
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  sqlserver-data:
+  mongo-data:
