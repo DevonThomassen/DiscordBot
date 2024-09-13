@@ -1,15 +1,15 @@
 version: '3.4'
 
 services:
-  discordbot.web:
-    image: ${DOCKER_REGISTRY-}discordbotweb
+  arcadevault.web:
+    image: ${DOCKER_REGISTRY-}arcadevaultweb
     build:
       context: .
-      dockerfile: DiscordBot.Web/Dockerfile
+      dockerfile: ArcadeVault.Web/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - MONGO_CONNECTION_STRING=mongodb://mongo:27017
-      - SQLSERVER_CONNECTION_STRING=Server=localhost,1433;Database=DiscordBot;User Id=sa;Password=${SA_PASSWORD};
+      - SQLSERVER_CONNECTION_STRING=Server=localhost,1433;Database=ArcadeVault;User Id=sa;Password=${SA_PASSWORD};
 
   sqlserver:
     image: mcr.microsoft.com/azure-sql-edge:latest

@@ -7,7 +7,7 @@
     <ProjectGuid>bfb8d7f9-093d-496e-8946-dc10b71b4f12</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
-    <DockerServiceName>discordbot.web</DockerServiceName>
+    <DockerServiceName>arcadevault.web</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.override.yml">
