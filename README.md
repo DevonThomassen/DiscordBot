@@ -1,1 +1,2 @@
-# Discord bot :)
+# Arcade vault :)
+## Discord bot
