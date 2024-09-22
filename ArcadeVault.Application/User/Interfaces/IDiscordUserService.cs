@@ -11,7 +11,7 @@ public interface IDiscordUserService
     /// </summary>
     /// <param name="discordId"></param>
     /// <returns></returns>
-    bool IsRegisteredByDiscordId(string discordId);
+    Result<bool> IsRegisteredByDiscordId(string discordId);
 
     /// <summary>
     /// Retrieves a user by their Discord ID.

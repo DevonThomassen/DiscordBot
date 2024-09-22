@@ -4,7 +4,7 @@ using ArcadeVault.Domain.Models.Common;
 using ArcadeVault.Domain.Monads.Result;
 using ArcadeVault.Infrastructure.Common;
 using ArcadeVault.Infrastructure.Database;
-using ArcadeVault.Infrastructure.Entities.Common;
+using ArcadeVault.Infrastructure.Database.Entities.Common;
 using ArcadeVault.Infrastructure.Extensions;
 
 namespace ArcadeVault.Infrastructure.Repositories;

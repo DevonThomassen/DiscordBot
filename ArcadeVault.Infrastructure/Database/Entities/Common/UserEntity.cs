@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ArcadeVault.Infrastructure.Entities.Common;
+namespace ArcadeVault.Infrastructure.Database.Entities.Common;
 
 internal class UserEntity
 {

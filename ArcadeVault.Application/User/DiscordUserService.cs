@@ -17,9 +17,9 @@ internal sealed class DiscordUserService(
         userRepository ?? throw new ArgumentNullException(nameof(userRepository));
 
     /// <inheritdoc />
-    public bool IsRegisteredByDiscordId(string discordId)
+    public Result<bool> IsRegisteredByDiscordId(string discordId)
     {
-        throw new NotImplementedException();
+        return _discordUserRepository.IsRegistered(discordId);
     }
 
     /// <inheritdoc />
@@ -33,13 +33,18 @@ internal sealed class DiscordUserService(
     public async Task<Result<DiscordUser>> RegisterUserWithDiscordAsync(string name, string discordId)
     {
         var isRegistered = _discordUserRepository.IsRegistered(discordId);
-        if (isRegistered)
+        if (isRegistered.IsError)
+        {
+            return Result<DiscordUser>.Error(isRegistered.FirstError);
+        }
+
+        if (isRegistered.Value)
         {
             return Result<DiscordUser>.Error(Error.Conflict(description: "Discord id is already registered"));
         }
 
         var userResult = await _userRepository.RegisterByNameAsync(name);
-        if (!userResult.IsSuccess)
+        if (userResult.IsError)
         {
             return Result<DiscordUser>.Error(userResult.Errors.FirstOrDefault());
         }

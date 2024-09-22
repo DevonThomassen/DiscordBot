@@ -6,7 +6,7 @@ namespace ArcadeVault.Application.User.Interfaces;
 
 public interface IDiscordUserRepository
 {
-    bool IsRegistered(string discordId);
+    Result<bool> IsRegistered(string discordId);
     Result<DiscordUser> GetByDiscordId(string discordId);
     Result<int> GetUserIdByDiscordId(string discordId);
     Result<bool> HasUserEnoughBalance(string discordId, int tokens);

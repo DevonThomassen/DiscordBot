@@ -1,5 +1,5 @@
 ﻿using ArcadeVault.Domain.Models.Common;
-using ArcadeVault.Infrastructure.Entities.Common;
+using ArcadeVault.Infrastructure.Database.Entities.Common;
 
 namespace ArcadeVault.Infrastructure.Extensions;
 

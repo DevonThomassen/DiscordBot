@@ -9,8 +9,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - MONGO_CONNECTION_STRING=mongodb://mongo:27017
-      - SQLSERVER_CONNECTION_STRING=Server=localhost,1433;Database=ArcadeVault;User Id=sa;Password=${SA_PASSWORD};
-
+      - SQLSERVER_CONNECTION_STRING=Server=host.docker.internal,1433;Database=ArcadeVault;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True;Trusted_Connection=False
   sqlserver:
     image: mcr.microsoft.com/azure-sql-edge:latest
     container_name: sqlserver
@@ -23,14 +22,14 @@ services:
     volumes:
       - sqlserver-data:/var/opt/mssql
 
-  mongo:
-    image: mongo:latest
-    container_name: mongo
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
+  # mongo:
+  #   image: mongo:latest
+  #   container_name: mongo
+  #   ports:
+  #     - "27017:27017"
+  #   volumes:
+  #     - mongo-data:/data/db
 
 volumes:
   sqlserver-data:
-  mongo-data:
+  # mongo-data:

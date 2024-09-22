@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using ArcadeVault.Infrastructure.Entities.Common;
+﻿using ArcadeVault.Infrastructure.Database.Entities.Common;
+using System.ComponentModel.DataAnnotations;
 
-namespace ArcadeVault.Infrastructure.Entities.Discord;
+namespace ArcadeVault.Infrastructure.Database.Entities.Discord;
 
 internal sealed class DiscordUserEntity
 {

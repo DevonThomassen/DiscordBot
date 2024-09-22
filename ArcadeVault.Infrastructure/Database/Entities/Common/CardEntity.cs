@@ -1,4 +1,4 @@
-﻿namespace ArcadeVault.Infrastructure.Entities.Common;
+﻿namespace ArcadeVault.Infrastructure.Database.Entities.Common;
 
 internal class CardEntity
 {
