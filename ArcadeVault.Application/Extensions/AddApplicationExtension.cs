@@ -1,6 +1,7 @@
 ﻿using ArcadeVault.Application.Common;
 using ArcadeVault.Application.Common.Interfaces;
 using ArcadeVault.Application.Games.CoinFlip;
+using ArcadeVault.Application.Games.CoinFlip.Interfaces;
 using ArcadeVault.Application.User;
 using ArcadeVault.Application.User.Interfaces;
 using Microsoft.Extensions.DependencyInjection;

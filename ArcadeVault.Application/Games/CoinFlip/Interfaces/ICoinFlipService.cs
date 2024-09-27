@@ -2,7 +2,7 @@
 using ArcadeVault.Domain.Monads.Result;
 using DomainCoinFlipOutcome = ArcadeVault.Domain.Games.Coinflip.CoinFlipOutcome;
 
-namespace ArcadeVault.Application.Games.CoinFlip;
+namespace ArcadeVault.Application.Games.CoinFlip.Interfaces;
 
 public interface ICoinFlipService
 {

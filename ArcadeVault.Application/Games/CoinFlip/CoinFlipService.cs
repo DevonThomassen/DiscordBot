@@ -1,4 +1,5 @@
-﻿using ArcadeVault.Application.Games.CoinFlip.Models;
+﻿using ArcadeVault.Application.Games.CoinFlip.Interfaces;
+using ArcadeVault.Application.Games.CoinFlip.Models;
 using ArcadeVault.Application.User.Interfaces;
 using ArcadeVault.Domain.Common.Enums;
 using ArcadeVault.Domain.Monads.Result;
