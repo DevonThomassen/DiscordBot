@@ -8,13 +8,19 @@ public readonly partial record struct ErrorOr<TValue>
     private readonly TValue? _value;
     private readonly List<Error>? _errors;
 
+    [MemberNotNullWhen(true, nameof(_value))]
+    [MemberNotNullWhen(true, nameof(Value))]
+    [MemberNotNullWhen(false, nameof(_errors))]
+    [MemberNotNullWhen(false, nameof(Errors))]
+    public bool IsSuccess => _errors is null;
+
+    [MemberNotNullWhen(true, nameof(_errors))]
+    [MemberNotNullWhen(true, nameof(Errors))]
+    public bool IsError => _errors is not null;
+
     private ErrorOr(TValue value)
     {
-        if (value is null)
-        {
-            throw new ArgumentNullException(nameof(value));
-        }
-
+        ArgumentNullException.ThrowIfNull(value);
         _value = value;
     }
 
@@ -27,7 +33,6 @@ public readonly partial record struct ErrorOr<TValue>
     private ErrorOr(List<Error> errors)
     {
         ArgumentNullException.ThrowIfNull(errors);
-
         if (errors.Count == 0)
         {
             throw new ArgumentNullException();
@@ -35,12 +40,6 @@ public readonly partial record struct ErrorOr<TValue>
 
         _errors = errors;
     }
-
-    [MemberNotNullWhen(true, nameof(_value))]
-    [MemberNotNullWhen(false, nameof(_errors))]
-    public bool IsSuccess => _errors is null;
-
-    public bool IsError => _errors is not null;
 
     public TValue Value => IsSuccess
         ? _value
@@ -61,7 +60,7 @@ public readonly partial record struct ErrorOr<TValue>
 
     public Error FirstError => !IsSuccess
         ? Errors[0]
-        : throw new InvalidOperationException();
+        : throw new InvalidOperationException("No errors");
 
     public ErrorOr<TValue> AddError(Error error)
     {

@@ -2,7 +2,7 @@
 
 public readonly partial record struct Result<TValue>
 {
-    public Result<TNewValue> Bind<TNewValue>(Func<TValue, ErrorOr<TNewValue>> binder)
+    public Result<TNewValue> Bind<TNewValue>(Func<TValue, Result<TNewValue>> binder)
     {
         return IsSuccess
             ? binder(_value)

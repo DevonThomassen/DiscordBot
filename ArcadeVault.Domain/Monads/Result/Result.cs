@@ -7,17 +7,22 @@ public readonly partial record struct Result<TValue>
 {
     private readonly TValue? _value;
     private readonly List<Error>? _errors;
-    private bool _isSuccess { get; } = false;
+
+    [MemberNotNullWhen(true, nameof(_value))]
+    [MemberNotNullWhen(true, nameof(Value))]
+    [MemberNotNullWhen(false, nameof(_errors))]
+    [MemberNotNullWhen(false, nameof(Errors))]
+    public bool IsSuccess { get; }
+
+    [MemberNotNullWhen(true, nameof(_errors))]
+    [MemberNotNullWhen(true, nameof(Errors))]
+    public bool HasErrors => _errors is not null;
 
     private Result(TValue value)
     {
-        if (value is null)
-        {
-            throw new ArgumentNullException(nameof(value));
-        }
-
+        ArgumentNullException.ThrowIfNull(value);
         _value = value;
-        _isSuccess = true;
+        IsSuccess = true;
     }
 
     private Result(TValue value, List<Error> errors)
@@ -27,39 +32,31 @@ public readonly partial record struct Result<TValue>
 
         if (errors.Count == 0)
         {
-            throw new ArgumentNullException();
+            throw new ArgumentNullException(nameof(errors));
         }
 
         _value = value;
         _errors = errors;
-        _isSuccess = true;
+        IsSuccess = true;
     }
 
     private Result(Error error)
     {
         _errors = [error];
-        _isSuccess = false;
+        IsSuccess = false;
     }
 
     private Result(List<Error> errors)
     {
         ArgumentNullException.ThrowIfNull(errors);
-
         if (errors.Count == 0)
         {
-            throw new ArgumentNullException();
+            throw new ArgumentNullException(nameof(errors));
         }
 
         _errors = errors;
-        _isSuccess = false;
+        IsSuccess = false;
     }
-
-    [MemberNotNullWhen(true, nameof(_value))]
-    [MemberNotNullWhen(false, nameof(_errors))]
-    public bool IsSuccess => _isSuccess;
-
-    [MemberNotNullWhen(true, nameof(_errors))]
-    public bool HasErrors => _errors is not null;
 
     public TValue Value => IsSuccess
         ? _value
@@ -87,7 +84,7 @@ public readonly partial record struct Result<TValue>
 
     public static Result<TValue> Success(TValue result, List<Error>? errors)
     {
-        return errors is null
+        return errors is null || errors.Count == 0
             ? new Result<TValue>(result)
             : new Result<TValue>(result, errors);
     }
