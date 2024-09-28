@@ -20,6 +20,7 @@ public readonly partial record struct ErrorOr<TValue>
 
     private ErrorOr(Error error)
     {
+        ArgumentNullException.ThrowIfNull(error);
         _errors = [error];
     }
 
@@ -43,7 +44,7 @@ public readonly partial record struct ErrorOr<TValue>
 
     public TValue Value => IsSuccess
         ? _value
-        : throw new InvalidOperationException("Result is not successful.");
+        : throw new InvalidOperationException("ErrorOr is not successful.");
 
     public TValue? ValueOrDefault => IsSuccess
         ? _value
@@ -56,7 +57,7 @@ public readonly partial record struct ErrorOr<TValue>
 
     public IReadOnlyList<Error> ErrorsOrEmptyList => !IsSuccess
         ? _errors.AsReadOnly()
-        : new List<Error>().AsReadOnly();
+        : EmptyError.Instance;
 
     public Error FirstError => !IsSuccess
         ? Errors[0]
