@@ -1,14 +1,14 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using ArcadeVault.Domain.Common;
+﻿using ArcadeVault.Domain.Common;
+using System.Diagnostics.CodeAnalysis;
 
-namespace ArcadeVault.Domain.Monads.Result;
+namespace ArcadeVault.Domain.Monads.ErrorOr;
 
-public readonly partial record struct Result<TValue>
+public readonly partial record struct ErrorOr<TValue>
 {
     private readonly TValue? _value;
     private readonly List<Error>? _errors;
 
-    private Result(TValue value)
+    private ErrorOr(TValue value)
     {
         if (value is null)
         {
@@ -18,12 +18,12 @@ public readonly partial record struct Result<TValue>
         _value = value;
     }
 
-    private Result(Error error)
+    private ErrorOr(Error error)
     {
         _errors = [error];
     }
 
-    private Result(List<Error> errors)
+    private ErrorOr(List<Error> errors)
     {
         ArgumentNullException.ThrowIfNull(errors);
 
@@ -62,7 +62,7 @@ public readonly partial record struct Result<TValue>
         ? Errors[0]
         : throw new InvalidOperationException();
 
-    public Result<TValue> AddError(Error error)
+    public ErrorOr<TValue> AddError(Error error)
     {
         if (!IsSuccess)
         {
@@ -72,12 +72,12 @@ public readonly partial record struct Result<TValue>
         return this;
     }
 
-    public static Result<TValue> Success(TValue result)
+    public static ErrorOr<TValue> Success(TValue result)
         => new(result);
 
-    public static Result<TValue> Error(Error error)
+    public static ErrorOr<TValue> Error(Error error)
         => new(error);
 
-    public static Result<TValue> Error(List<Error> errors)
+    public static ErrorOr<TValue> Error(List<Error> errors)
         => new(errors);
 }

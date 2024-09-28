@@ -1,5 +1,5 @@
 ﻿using ArcadeVault.Application.Common.Interfaces;
-using ArcadeVault.Domain.Monads.Result;
+using ArcadeVault.Domain.Monads.ErrorOr;
 
 namespace ArcadeVault.Application.Common;
 
@@ -10,7 +10,7 @@ internal sealed class LobbyService : ILobbyService
         throw new NotImplementedException();
     }
 
-    public Task<Result<T>> FinalizeLobbyAsync<T>(string lobbyId)
+    public Task<ErrorOr<T>> FinalizeLobbyAsync<T>(string lobbyId)
     {
         throw new NotImplementedException();
     }

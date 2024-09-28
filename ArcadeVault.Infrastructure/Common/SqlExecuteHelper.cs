@@ -1,64 +1,65 @@
 ﻿using ArcadeVault.Domain.Common;
-using ArcadeVault.Domain.Monads.Result;
+using ArcadeVault.Domain.Monads.ErrorOr;
 using Microsoft.Data.SqlClient;
 
 namespace ArcadeVault.Infrastructure.Common;
 
 internal static class SqlExecuteHelper
 {
-    public static Result<T> Execute<T>(Func<T> action)
+    public static ErrorOr<T> Execute<T>(Func<T> action)
     {
         try
         {
-            return Result<T>.Success(action());
+            return ErrorOr<T>.Success(action());
         }
         catch (SqlException ex)
         {
-            return Result<T>.Error(Error.Unexpected(description: ex.Message));
+            return ErrorOr<T>.Error(Error.Unexpected(description: ex.Message));
         }
         catch (Exception ex)
         {
-            return Result<T>.Error(Error.Unexpected(description: ex.Message));
+            return ErrorOr<T>.Error(Error.Unexpected(description: ex.Message));
         }
     }
 
-    public static Result<T> Execute<T>(Func<T> action, Func<Exception, Error> errorAction)
+    public static ErrorOr<T> Execute<T>(Func<T> action, Func<Exception, Error> errorAction)
     {
         try
         {
-            return Result<T>.Success(action());
+            return ErrorOr<T>.Success(action());
         }
         catch (Exception ex)
         {
-            return Result<T>.Error(errorAction(ex));
+            return ErrorOr<T>.Error(errorAction(ex));
         }
     }
 
-    public static async Task<Result<T>> ExecuteAsync<T>(Func<Task<T>> action)
+    public static async Task<ErrorOr<T>> ExecuteAsync<T>(Func<Task<T>> action)
     {
         try
         {
-            return Result<T>.Success(await action());
+            return ErrorOr<T>.Success(await action());
         }
         catch (SqlException ex)
         {
-            return Result<T>.Error(Error.Unexpected(description: ex.Message));
+            return ErrorOr<T>.Error(Error.Unexpected(description: ex.Message));
         }
         catch (Exception ex)
         {
-            return Result<T>.Error(Error.Unexpected(description: ex.Message));
+            return ErrorOr<T>.Error(Error.Unexpected(description: ex.Message));
         }
     }
 
-    public static async Task<Result<T>> ExecuteAsync<T>(Func<Task<T>> action, Func<Exception, Error> errorAction)
+    public static async Task<ErrorOr<T>> ExecuteAsync<T>(Func<Task<T>> action,
+        Func<Exception, Error> errorAction)
     {
         try
         {
-            return Result<T>.Success(await action());
+            return ErrorOr<T>.Success(await action());
         }
         catch (Exception ex)
         {
-            return Result<T>.Error(errorAction(ex));
+            return ErrorOr<T>.Error(errorAction(ex));
         }
     }
 }

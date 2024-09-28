@@ -1,8 +1,8 @@
 ﻿using ArcadeVault.Domain.Common;
 
-namespace ArcadeVault.Domain.Monads.Result;
+namespace ArcadeVault.Domain.Monads.ErrorOr;
 
-public readonly partial record struct Result<TValue>
+public readonly partial record struct ErrorOr<TValue>
 {
     public TResultReturn Match<TResultReturn>(
         Func<TValue, TResultReturn> onSuccess,

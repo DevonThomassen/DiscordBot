@@ -1,9 +1,9 @@
-﻿using ArcadeVault.Domain.Monads.Result;
+﻿using ArcadeVault.Domain.Monads.ErrorOr;
 
 namespace ArcadeVault.Application.Common.Interfaces;
 
 public interface ILobbyService
 {
     Task CreateLobbyAsync();
-    Task<Result<T>> FinalizeLobbyAsync<T>(string lobbyId);
+    Task<ErrorOr<T>> FinalizeLobbyAsync<T>(string lobbyId);
 }

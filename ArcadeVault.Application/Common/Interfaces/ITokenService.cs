@@ -1,4 +1,4 @@
-﻿using ArcadeVault.Domain.Monads.Result;
+﻿using ArcadeVault.Domain.Monads.ErrorOr;
 
 namespace ArcadeVault.Application.Common.Interfaces;
 
@@ -9,5 +9,5 @@ public interface ITokenService
     /// </summary>
     /// <param name="discordId"></param>
     /// <returns></returns>
-    Task<Result<int>> ClaimDaily(string discordId);
+    Task<ErrorOr<int>> ClaimDaily(string discordId);
 }
