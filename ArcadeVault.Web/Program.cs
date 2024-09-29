@@ -1,5 +1,5 @@
-using ArcadeVault.Application.Extensions;
-using ArcadeVault.Infrastructure.Extensions;
+using ArcadeVault.Application;
+using ArcadeVault.Infrastructure;
 using System.Reflection;
 using System.Text.Json.Serialization;
 

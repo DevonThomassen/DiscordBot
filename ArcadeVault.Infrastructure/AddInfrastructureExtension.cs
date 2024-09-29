@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ArcadeVault.Infrastructure.Extensions;
+namespace ArcadeVault.Infrastructure;
 
 public static class AddInfrastructureExtension
 {

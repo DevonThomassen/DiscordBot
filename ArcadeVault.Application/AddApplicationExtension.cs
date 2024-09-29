@@ -6,7 +6,7 @@ using ArcadeVault.Application.User;
 using ArcadeVault.Application.User.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ArcadeVault.Application.Extensions;
+namespace ArcadeVault.Application;
 
 public static class AddApplicationExtension
 {
