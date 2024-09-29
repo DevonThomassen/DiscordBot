@@ -1,8 +1,8 @@
 ﻿using ArcadeVault.Application.Games.CoinFlip.Models;
-using ArcadeVault.Domain.Monads.Result;
+using ArcadeVault.Domain.Monads.ErrorOr;
 using DomainCoinFlipOutcome = ArcadeVault.Domain.Games.Coinflip.CoinFlipOutcome;
 
-namespace ArcadeVault.Application.Games.CoinFlip;
+namespace ArcadeVault.Application.Games.CoinFlip.Interfaces;
 
 public interface ICoinFlipService
 {
@@ -24,5 +24,6 @@ public interface ICoinFlipService
     /// </summary>
     /// <param name="wagerRequest"></param>
     /// <returns></returns>
-    Task<Result<CoinFlipWagerResult>> PerformWageredCoinFlipAsync(CoinFlipWagerRequest wagerRequest);
+    Task<ErrorOr<CoinFlipWagerResult>> PerformWageredCoinFlipAsync(
+        CoinFlipWagerRequest wagerRequest);
 }

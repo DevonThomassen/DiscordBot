@@ -1,7 +1,8 @@
-﻿using ArcadeVault.Application.Games.CoinFlip.Models;
+﻿using ArcadeVault.Application.Games.CoinFlip.Interfaces;
+using ArcadeVault.Application.Games.CoinFlip.Models;
 using ArcadeVault.Application.User.Interfaces;
 using ArcadeVault.Domain.Common.Enums;
-using ArcadeVault.Domain.Monads.Result;
+using ArcadeVault.Domain.Monads.ErrorOr;
 using DomainCoinFlipOutcome = ArcadeVault.Domain.Games.Coinflip.CoinFlipOutcome;
 
 namespace ArcadeVault.Application.Games.CoinFlip;
@@ -37,12 +38,13 @@ internal sealed class CoinFlipService(
         };
     }
 
-    public async Task<Result<CoinFlipWagerResult>> PerformWageredCoinFlipAsync(CoinFlipWagerRequest wagerRequest)
+    public async Task<ErrorOr<CoinFlipWagerResult>> PerformWageredCoinFlipAsync(
+        CoinFlipWagerRequest wagerRequest)
     {
         var balanceResult = _discordUserRepository.HasUserEnoughBalance(wagerRequest.DiscordId, wagerRequest.Amount);
         if (balanceResult.IsError)
         {
-            return Result<CoinFlipWagerResult>.Error(balanceResult.FirstError);
+            return ErrorOr<CoinFlipWagerResult>.Error(balanceResult.FirstError);
         }
 
         var coin = FlipCoin();
@@ -54,7 +56,7 @@ internal sealed class CoinFlipService(
 
         if (discordUser.IsError)
         {
-            return Result<CoinFlipWagerResult>.Error(discordUser.FirstError);
+            return ErrorOr<CoinFlipWagerResult>.Error(discordUser.FirstError);
         }
 
         var amount = wagerRequest.WagerOutcome == coin
@@ -64,8 +66,8 @@ internal sealed class CoinFlipService(
         var updateResult = await _userRepository.UpdateBalanceAsync(discordUser.Value.InternalId, amount);
 
         return updateResult.IsError
-            ? Result<CoinFlipWagerResult>.Error(updateResult.FirstError)
-            : Result<CoinFlipWagerResult>.Success(new CoinFlipWagerResult
+            ? ErrorOr<CoinFlipWagerResult>.Error(updateResult.FirstError)
+            : ErrorOr<CoinFlipWagerResult>.Success(new CoinFlipWagerResult
             {
                 GameResult = gameResult,
                 CoinFlipOutcome = coin,

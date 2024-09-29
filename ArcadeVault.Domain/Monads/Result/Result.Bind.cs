@@ -9,7 +9,8 @@ public readonly partial record struct Result<TValue>
             : Result<TNewValue>.Error([.. _errors]);
     }
 
-    public async Task<Result<TNewValue>> BindAsync<TNewValue>(Func<TValue, Task<Result<TNewValue>>> binder)
+    public async Task<Result<TNewValue>> BindAsync<TNewValue>(
+        Func<TValue, Task<Result<TNewValue>>> binder)
     {
         return IsSuccess
             ? await binder(_value)

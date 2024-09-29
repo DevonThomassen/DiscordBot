@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ArcadeVault.Infrastructure.Extensions;
+namespace ArcadeVault.Infrastructure;
 
 public static class AddInfrastructureExtension
 {
@@ -15,9 +15,9 @@ public static class AddInfrastructureExtension
         return serviceCollection
             .AddDbContext<DatabaseContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(Environment.GetEnvironmentVariable("SQLSERVER_CONNECTION_STRING"));
             })
-            .AddScoped<IDiscordUserRepository, DiscordUserRepository>()
-            .AddScoped<IUserRepository, UserRepository>();
+            .AddTransient<IDiscordUserRepository, DiscordUserRepository>()
+            .AddTransient<IUserRepository, UserRepository>();
     }
 }

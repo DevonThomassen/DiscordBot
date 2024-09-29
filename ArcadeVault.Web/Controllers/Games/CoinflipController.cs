@@ -1,4 +1,4 @@
-﻿using ArcadeVault.Application.Games.CoinFlip;
+﻿using ArcadeVault.Application.Games.CoinFlip.Interfaces;
 using ArcadeVault.Application.Games.CoinFlip.Models;
 using ArcadeVault.Domain.Games.Coinflip;
 using ArcadeVault.Web.DTO.CoinFlip;

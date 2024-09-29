@@ -1,14 +1,14 @@
 ﻿using ArcadeVault.Domain.Models;
-using ArcadeVault.Domain.Monads.Result;
+using ArcadeVault.Domain.Monads.ErrorOr;
 using DomainUser = ArcadeVault.Domain.Models.Common.User;
 
 namespace ArcadeVault.Application.User.Interfaces;
 
 public interface IDiscordUserRepository
 {
-    bool IsRegistered(string discordId);
-    Result<DiscordUser> GetByDiscordId(string discordId);
-    Result<int> GetUserIdByDiscordId(string discordId);
-    Result<bool> HasUserEnoughBalance(string discordId, int tokens);
-    Task<Result<DiscordUser>> AddDiscordToUserAsync(DomainUser user, string discordId);
+    ErrorOr<bool> IsRegistered(string discordId);
+    ErrorOr<DiscordUser> GetByDiscordId(string discordId);
+    ErrorOr<int> GetUserIdByDiscordId(string discordId);
+    ErrorOr<bool> HasUserEnoughBalance(string discordId, int tokens);
+    Task<ErrorOr<DiscordUser>> AddDiscordToUserAsync(DomainUser user, string discordId);
 }

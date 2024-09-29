@@ -1,7 +1,7 @@
 ﻿using ArcadeVault.Application.User.Interfaces;
 using ArcadeVault.Domain.Common;
 using ArcadeVault.Domain.Models;
-using ArcadeVault.Domain.Monads.Result;
+using ArcadeVault.Domain.Monads.ErrorOr;
 using DomainUser = ArcadeVault.Domain.Models.Common.User;
 
 namespace ArcadeVault.Application.User;
@@ -17,38 +17,45 @@ internal sealed class DiscordUserService(
         userRepository ?? throw new ArgumentNullException(nameof(userRepository));
 
     /// <inheritdoc />
-    public bool IsRegisteredByDiscordId(string discordId)
+    public ErrorOr<bool> IsRegisteredByDiscordId(string discordId)
     {
-        throw new NotImplementedException();
+        return _discordUserRepository.IsRegistered(discordId);
     }
 
     /// <inheritdoc />
-    public Result<DiscordUser> GetUserWithDiscordId(string discordId)
+    public ErrorOr<DiscordUser> GetUserWithDiscordId(string discordId)
     {
         return _discordUserRepository
             .GetByDiscordId(discordId);
     }
 
     /// <inheritdoc />
-    public async Task<Result<DiscordUser>> RegisterUserWithDiscordAsync(string name, string discordId)
+    public async Task<ErrorOr<DiscordUser>> RegisterUserWithDiscordAsync(string name,
+        string discordId)
     {
         var isRegistered = _discordUserRepository.IsRegistered(discordId);
-        if (isRegistered)
+        if (isRegistered.IsError)
         {
-            return Result<DiscordUser>.Error(Error.Conflict(description: "Discord id is already registered"));
+            return ErrorOr<DiscordUser>.Error(isRegistered.FirstError);
+        }
+
+        if (isRegistered.Value)
+        {
+            return ErrorOr<DiscordUser>.Error(
+                Error.Conflict(description: "Discord id is already registered"));
         }
 
         var userResult = await _userRepository.RegisterByNameAsync(name);
-        if (!userResult.IsSuccess)
+        if (userResult.IsError)
         {
-            return Result<DiscordUser>.Error(userResult.Errors.FirstOrDefault());
+            return ErrorOr<DiscordUser>.Error(userResult.Errors.FirstOrDefault());
         }
 
         return await _discordUserRepository.AddDiscordToUserAsync(userResult.Value, discordId);
     }
 
     /// <inheritdoc />
-    public async Task<Result<DomainUser>> UpdateNameAsync(string discordId, string name)
+    public async Task<ErrorOr<DomainUser>> UpdateNameAsync(string discordId, string name)
     {
         return await _discordUserRepository.GetUserIdByDiscordId(discordId)
             .BindAsync(id => _userRepository.UpdateNameAsync(id, name));

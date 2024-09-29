@@ -1,7 +1,7 @@
+using ArcadeVault.Application;
+using ArcadeVault.Infrastructure;
 using System.Reflection;
 using System.Text.Json.Serialization;
-using ArcadeVault.Application.Extensions;
-using ArcadeVault.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

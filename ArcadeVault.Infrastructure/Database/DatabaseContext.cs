@@ -1,5 +1,5 @@
-﻿using ArcadeVault.Infrastructure.Entities.Common;
-using ArcadeVault.Infrastructure.Entities.Discord;
+﻿using ArcadeVault.Infrastructure.Database.Entities.Common;
+using ArcadeVault.Infrastructure.Database.Entities.Discord;
 using Microsoft.EntityFrameworkCore;
 
 namespace ArcadeVault.Infrastructure.Database;

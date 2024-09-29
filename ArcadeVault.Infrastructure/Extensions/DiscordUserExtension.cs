@@ -1,5 +1,5 @@
 ﻿using ArcadeVault.Domain.Models;
-using ArcadeVault.Infrastructure.Entities.Discord;
+using ArcadeVault.Infrastructure.Database.Entities.Discord;
 
 namespace ArcadeVault.Infrastructure.Extensions;
 

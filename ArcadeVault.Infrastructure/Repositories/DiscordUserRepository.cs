@@ -1,13 +1,13 @@
 ﻿using ArcadeVault.Application.User.Interfaces;
 using ArcadeVault.Domain.Common;
-using ArcadeVault.Domain.Models;
 using ArcadeVault.Domain.Models.Common;
-using ArcadeVault.Domain.Monads.Result;
+using ArcadeVault.Domain.Monads.ErrorOr;
 using ArcadeVault.Infrastructure.Common;
 using ArcadeVault.Infrastructure.Database;
-using ArcadeVault.Infrastructure.Entities.Discord;
+using ArcadeVault.Infrastructure.Database.Entities.Discord;
 using ArcadeVault.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
+using DomainDiscordUser = ArcadeVault.Domain.Models.DiscordUser;
 
 namespace ArcadeVault.Infrastructure.Repositories;
 
@@ -15,49 +15,64 @@ internal sealed class DiscordUserRepository(DatabaseContext ctx) : IDiscordUserR
 {
     private readonly DatabaseContext _ctx = ctx ?? throw new ArgumentNullException();
 
-    public bool IsRegistered(string discordId)
+    public ErrorOr<bool> IsRegistered(string discordId)
     {
-        var entity = _ctx.DiscordUsers.FirstOrDefault(p => p.DiscordId == discordId);
-        return entity is not null;
+        try
+        {
+            var entity = _ctx.DiscordUsers.FirstOrDefault(p => p.DiscordId == discordId);
+            return ErrorOr<bool>.Success(entity is not null);
+        }
+        catch (Exception ex)
+        {
+            return ErrorOr<bool>.Error(Error.Unexpected(description: ex.Message));
+        }
     }
 
-    public Result<DiscordUser> GetByDiscordId(string discordId)
+    public ErrorOr<DomainDiscordUser> GetByDiscordId(string discordId)
     {
         var entity = _ctx.DiscordUsers
             .Include(discordUserEntity => discordUserEntity.User)
             .FirstOrDefault(x => x.DiscordId == discordId);
 
-        if (entity is null) return Result<DiscordUser>.Error(Error.NotFound());
-        if (entity.User is null) return Result<DiscordUser>.Error(Error.NotFound());
+        if (entity is null) return ErrorOr<DomainDiscordUser>.Error(Error.NotFound());
+        if (entity.User is null) return ErrorOr<DomainDiscordUser>.Error(Error.NotFound());
 
-        return Result<DiscordUser>.Success(entity.ToDomain());
+        return ErrorOr<DomainDiscordUser>.Success(entity.ToDomain());
     }
 
-    public Result<int> GetUserIdByDiscordId(string discordId)
+    public ErrorOr<int> GetUserIdByDiscordId(string discordId)
     {
-        var entity = _ctx.DiscordUsers.FirstOrDefault(x => x.DiscordId == discordId);
+        try
+        {
+            var entity = _ctx.DiscordUsers.FirstOrDefault(x => x.DiscordId == discordId);
 
-        return entity is null
-            ? Result<int>.Error(Error.NotFound())
-            : Result<int>.Success(entity.UserId);
+            return entity is null
+                ? ErrorOr<int>.Error(Error.NotFound())
+                : ErrorOr<int>.Success(entity.UserId);
+        }
+        catch (Exception ex)
+        {
+            return ErrorOr<int>.Error(Error.Unexpected(description: ex.Message));
+        }
     }
 
-    public Result<bool> HasUserEnoughBalance(string discordId, int tokens)
+    public ErrorOr<bool> HasUserEnoughBalance(string discordId, int tokens)
     {
         var userResult = GetByDiscordId(discordId);
 
         if (!userResult.IsSuccess)
         {
-            return Result<bool>.Error(Error.NotFound());
+            return ErrorOr<bool>.Error(Error.NotFound());
         }
 
         var balance = userResult.Value.Tokens;
         return tokens > balance
-            ? Result<bool>.Error(Error.Validation())
-            : Result<bool>.Success(true);
+            ? ErrorOr<bool>.Error(Error.Validation())
+            : ErrorOr<bool>.Success(true);
     }
 
-    public async Task<Result<DiscordUser>> AddDiscordToUserAsync(User user, string discordId)
+    public async Task<ErrorOr<DomainDiscordUser>> AddDiscordToUserAsync(User user,
+        string discordId)
     {
         return await SqlExecuteHelper.ExecuteAsync(async () =>
         {

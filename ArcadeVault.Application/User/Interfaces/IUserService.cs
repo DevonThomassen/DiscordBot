@@ -1,4 +1,4 @@
-﻿using ArcadeVault.Domain.Monads.Result;
+﻿using ArcadeVault.Domain.Monads.ErrorOr;
 using DomainUser = ArcadeVault.Domain.Models.Common.User;
 
 namespace ArcadeVault.Application.User.Interfaces;
@@ -10,12 +10,12 @@ public interface IUserService
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    Task<Result<DomainUser>> RegisterAsync(string name);
+    Task<ErrorOr<DomainUser>> RegisterAsync(string name);
 
     /// <summary>
     /// Retrieves a user by their public id
     /// </summary>
     /// <param name="userId"></param>
     /// <returns></returns>
-    Result<DomainUser> GetByPublicId(string userId);
+    ErrorOr<DomainUser> GetByPublicId(string userId);
 }
